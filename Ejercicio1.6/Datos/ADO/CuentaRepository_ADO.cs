@@ -54,13 +54,15 @@ namespace Ejercicio1._6.Datos.ADO
             List<Cuenta> cuentas = new List<Cuenta>();
             var helper = DataHelper.GetInstance();
             var dt = helper.ExecuteSPQuery("SP_RECUPERAR_CUENTAS", null);
-            foreach (DataRow row in dt.Rows)
+            if (dt != null) 
             {
-                Cuenta oCuenta = Mapeo(row);
-
-                cuentas.Add(oCuenta);
+                foreach (DataRow row in dt.Rows)
+                {
+                    Cuenta oCuenta = Mapeo(row);
+                    cuentas.Add(oCuenta);
+                }
             }
-            return cuentas;
+                return cuentas;
         }
 
         public Cuenta GetById(int id)
@@ -87,9 +89,9 @@ namespace Ejercicio1._6.Datos.ADO
             {
                 parametros.Add(new ParameterSQL("@cbu",oCuenta.CBU));
                 parametros.Add(new ParameterSQL("@saldo", oCuenta.Saldo));
-                parametros.Add(new ParameterSQL("@tipo_cuenta", oCuenta._TipoCuenta));
+                parametros.Add(new ParameterSQL("@tipo_cuenta", oCuenta._TipoCuenta.Id));
                 parametros.Add(new ParameterSQL("@ultimoMovimiento", oCuenta.UltimoMov));
-                parametros.Add(new ParameterSQL("@cliente_dni", oCuenta._Cliente));
+                parametros.Add(new ParameterSQL("@cliente_dni", oCuenta._Cliente.DNI));
                 DataHelper.GetInstance().ExecuteSPNonQuery("SP_GUARDAR_CUENTA", parametros);
             }
             return result;
